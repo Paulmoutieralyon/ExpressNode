@@ -1,33 +1,28 @@
-const  express  =  require ( ' express ' );
-const  app  =  express ();
- port  =  3000 ;
+const express = require('express');
+const app = express();
+const port = 3000;
 
-app . get ( ' / ' , ( demande , réponse ) => {
-  réponse . envoyer ( ' Bienvenue sur Express ' );
+app.get('/api/movies', (request, response) => {
+    response.send('Récupération de tous les films');
 });
 
-app . get ( ' / api / movies ' , ( demande , réponse ) => {
-  réponse . envoyer ( ' Récupération de tous les films ' );
-});
+app.get('/api/movies/:id', (request, response) => {
+    const id = request.params.idFilm;
+    response.json({ id: id})
+})
 
-app . get ( ' / api / movies /: id ' , ( demande , réponse ) => {
-  const  id  =  demande . params . id ;
-  réponse . json ({id : id});
-});
+app.get('/api/employee', (resquest, response) => {
+    response.sendStatus(304);
+})
 
-app . get ( ' / api / employee ' , ( demande , réponse ) => {
-  réponse . sendStatus ( 304 );
-});
+app.get('/api/employee', (request, response) => {
+    const name = request.query.name;
+    response.status(404).send('Impossible de récupérer l\'employé ' + name)
+})
 
-app . get ( ' / api / employee /: name ' , ( demande , réponse ) => {
-  réponse . statut ( 404 ). send ( ` impossible de trouver réutilisé $ { request . params . name } ` )
-
-});
-
-app . listen (port, ( err ) => {
-  si (err) {
-    jeter une  nouvelle  erreur ( ' Quelque chose de mauvais est arrivé ... ' );
-  }
-
-  console . log ( `le serveur est à l’écoute sur $ { port } ` );
+app.listen(port, (err) => {
+    if (err) {
+        throw new Error('Something bad happened...');
+    }
+    console.log(`Server is listening on ${port}`);
 });
