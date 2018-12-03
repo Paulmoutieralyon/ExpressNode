@@ -1,36 +1,42 @@
-const express = require('express');
+const express = require("express");
 const app = express();
 const port = 3000;
 
-app.listen(port, (err) => {
+const connection = require("./conf");
+
+// écoute de l'url "/api/movies
+app.get("/api/movies", (req, res) => {
+  connection.query("SELECT * from movie", (err, results) => {
     if (err) {
-        throw new Error('Something bad happened...');
+      res.status(500).send("Erreur lors de la récupération des films");
+      console.log(err)
+    } else {
+      res.json(results);
     }
-    console.log(`Server is listening on ${port}`);
+  });
 });
 
-app.get('/', (request, response) => {
-    response.send('Hellow world !')
-})
-app.get('/api/movies', (request, response) => {
-    response.send('Récupération des films');
-});
-app.get('/api/movies/:id', (request, response) => {
-    console.log("movies")
-    response.json(request.params.id)
-});
-
-
-
-
-app.get('/api/employee', (request, response) => {
-    let id = request.query.id
-    console.log(id)
-    if (id !== undefined) {
-        response.status(404).send("Impossible de récupérer l'employé " + id);
+// écoute de l'url "/api/movies/names
+app.get("/api/movies/name", (req, res) => {
+  connection.query("SELECT name from movie", (err, results) => {
+    if (err) {
+      res.status(500).send("Erreur lors de la récupération des films");
+    } else {
+      res.json(results);
     }
-    else {
-        response.status(304).end()
-    }
-
+  });
 });
+
+app.listen(port, err => {
+  if (err) {
+    throw new Error("Something bad happened...");
+  }
+  console.log(`Server is listening on ${port}`);
+});
+const bodyParser = require('body-parser');
+// Support JSON-encoded bodies
+app.use(bodyParser.json());
+// Support URL-encoded bodies
+app.use(bodyParser.urlencoded({
+  extended: true
+}));
