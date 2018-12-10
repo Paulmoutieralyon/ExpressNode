@@ -9,10 +9,3 @@ port : 8889
 
 
 module.exports = connection;
-const bodyParser = require('body-parser');
-// Support JSON-encoded bodies
-app.use(bodyParser.json());
-// Support URL-encoded bodies
-app.use(bodyParser.urlencoded({
-  extended: true
-}));
